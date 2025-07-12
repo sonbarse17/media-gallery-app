@@ -11,6 +11,12 @@ This project is a modern media gallery platform that allows users to upload, vie
 - **Database:** MongoDB
 - **Containerization:** Docker, Docker Compose
 
+### Screenshots
+
+![Demo Screenshot](screenshot/demo.png)
+
+*Application demo showing the media gallery interface*
+
 ---
 
 Created by Sushant Sonbarse

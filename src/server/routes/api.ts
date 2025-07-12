@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import Media from '../models/Media';
-import { validateFile, queryValidation } from '../utils/validation';
+import { validateFile, validateFileFilter, queryValidation } from '../utils/validation';
 
 const router = express.Router();
 
@@ -31,7 +31,7 @@ const upload = multer({
   },
   fileFilter: (req, file, cb) => {
     try {
-      validateFile(file);
+      validateFileFilter(file);
       cb(null, true);
     } catch (error) {
       cb(new Error(error.message));
@@ -97,6 +97,9 @@ router.post('/media/upload', upload.single('file'), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
+
+    // Validate the complete file after upload
+    validateFile(req.file);
 
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     const fileUrl = `${baseUrl}/uploads/${req.file.filename}`;

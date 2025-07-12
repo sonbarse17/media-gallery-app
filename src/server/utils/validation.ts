@@ -1,5 +1,13 @@
 import Joi from 'joi';
 
+export const fileFilterValidation = Joi.object({
+  mimetype: Joi.string().valid(
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+    'video/mp4', 'video/webm', 'video/quicktime'
+  ).required(),
+  originalname: Joi.string().max(255).required()
+});
+
 export const uploadValidation = Joi.object({
   mimetype: Joi.string().valid(
     'image/jpeg', 'image/png', 'image/gif', 'image/webp',
@@ -16,6 +24,19 @@ export const queryValidation = Joi.object({
   sortBy: Joi.string().valid('createdAt', 'size', 'originalName').default('createdAt'),
   sortOrder: Joi.string().valid('asc', 'desc').default('desc')
 });
+
+export const validateFileFilter = (file: Express.Multer.File) => {
+  const { error } = fileFilterValidation.validate({
+    mimetype: file.mimetype,
+    originalname: file.originalname
+  });
+  
+  if (error) {
+    throw new Error(error.details[0].message);
+  }
+  
+  return true;
+};
 
 export const validateFile = (file: Express.Multer.File) => {
   const { error } = uploadValidation.validate({
